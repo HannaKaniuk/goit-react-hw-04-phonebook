@@ -1,0 +1,15 @@
+.filterInput {
+  height: 30px;
+  border-radius: 5px;
+  border: 2px solid rgb(126, 126, 126);
+  width: 70%;
+  margin-bottom: 10px;
+}
+.filterInput:focus {
+  border: 2px solid rgb(97, 97, 218);
+  outline: none;
+}
+.filterInput:hover {
+  border: 2px solid rgb(97, 97, 218);
+  outline: none;
+}

@@ -1,0 +1,38 @@
+.inputContact {
+  height: 30px;
+  border-radius: 5px;
+  border: 2px solid rgb(126, 126, 126);
+  width: 50%;
+  margin-bottom: 10px;
+}
+.inputContact:focus {
+  border: 2px solid rgb(97, 97, 218);
+  outline: none;
+}
+.inputContact:hover {
+  border: 2px solid rgb(97, 97, 218);
+  outline: none;
+}
+.formContact {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: flex-start;
+  border: 2px solid rgb(126, 126, 126);
+  padding: 20px;
+  border-radius: 5px;
+}
+.buttonContact {
+  height: 35px;
+  width: 120px;
+  border-radius: 50px;
+  border: 2px solid rgb(126, 126, 126);
+  cursor: pointer;
+}
+.buttonContact:hover {
+  background-color: rgb(97, 97, 218);
+  color: white;
+}
+.labelInput {
+  font-size: 20px;
+}

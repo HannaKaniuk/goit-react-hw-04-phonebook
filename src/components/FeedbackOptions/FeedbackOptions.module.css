@@ -1,0 +1,14 @@
+.containerBtn {
+  display: flex;
+  gap: 12px;
+}
+
+.button {
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+button:hover {
+  background: blue;
+}
