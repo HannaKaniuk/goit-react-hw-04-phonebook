@@ -1,136 +1,124 @@
-import React, { Component } from 'react';
+import { useEffect, useState } from 'react';
 import { nanoid } from 'nanoid';
 import { ContactForm } from './ContactForm/ContactForm';
 import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/Filter';
 
-export class App extends Component {
-  state = {
-    contacts: [],
-    filter: '',
-  };
+export const App = () => {
+  const [contacts, setContacts] = useState([]);
+  const [filter, setFilter] = useState('');
 
-  handleAddContact = newContact => {
-    const isExist = this.handleCheckUnique(newContact.name);
+  const handleAddContact = newContact => {
+    const isExist = handleCheckUnique(newContact.name);
 
     if (isExist) return false;
 
-    this.setState(
-      ({ contacts }) => ({
-        contacts: [...contacts, { id: nanoid(), ...newContact }],
-      }),
-      this.saveDataToLocalStorage
-    );
+    setContacts(prevContacts => [
+      ...prevContacts,
+      { id: nanoid(), ...newContact },
+    ]);
+
+    saveDataToLocalStorage();
 
     return true;
   };
 
-  handleCheckUnique = name => {
-    const { contacts } = this.state;
+  const handleCheckUnique = name => {
     const isExistContact = !!contacts.some(contact => contact.name === name);
     isExistContact && alert('Contact is already exist');
     return isExistContact;
   };
 
-  handleRemoveContact = id =>
-    this.setState(
-      ({ contacts }) => ({
-        contacts: contacts.filter(contact => contact.id !== id),
-      }),
-      this.saveDataToLocalStorage
+  const handleRemoveContact = id => {
+    setContacts(prevContacts =>
+      prevContacts.filter(contact => contact.id !== id)
     );
-
-  handleFilterChange = event => {
-    const filter = event.target.value;
-    this.setState({ filter });
+    saveDataToLocalStorage();
   };
 
-  getVisibleContacts = () => {
-    const { contacts, filter } = this.state;
+  const handleFilterChange = event => {
+    const filter = event.target.value;
+    setFilter(filter);
+  };
+
+  const getVisibleContacts = () => {
     return contacts.filter(contact =>
       contact.name.toLowerCase().includes(filter.toLowerCase())
     );
   };
 
-  saveDataToLocalStorage = () => {
-    const stringifiedContacts = JSON.stringify(this.state.contacts);
-    localStorage.setItem('contacts', stringifiedContacts);
+  const saveDataToLocalStorage = () => {
+    setContacts(prevContacts => {
+      const stringifiedContacts = JSON.stringify(prevContacts);
+      localStorage.setItem('contacts', stringifiedContacts);
+      return prevContacts;
+    });
   };
 
-  loadDataFromLocalStorage = () => {
+  const loadDataFromLocalStorage = () => {
     const stringifiedContacts = localStorage.getItem('contacts');
-    const contacts = JSON.parse(stringifiedContacts) ?? [];
-    this.setState({ contacts });
+    const parsedContacts = JSON.parse(stringifiedContacts) || [];
+    setContacts(parsedContacts);
   };
 
-  componentDidMount() {
-    window.addEventListener('load', this.loadDataFromLocalStorage);
-    this.loadDataFromLocalStorage();
-  }
+  useEffect(() => {
+    loadDataFromLocalStorage();
+  }, []);
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.contacts !== this.state.contacts) {
-      this.saveDataToLocalStorage();
-    }
-  }
-
-  render() {
-    const { filter } = this.state;
-    const visibleContacts = this.getVisibleContacts();
-    return (
+  const visibleContacts = getVisibleContacts();
+  return (
+    <div
+      style={{
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontSize: 40,
+        color: '#010101',
+      }}
+    >
       <div
         style={{
-          height: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          fontSize: 40,
-          color: '#010101',
+          width: '80%',
+          margin: 40,
         }}
       >
-        <div
+        <h1
           style={{
-            width: '80%',
-            margin: 40,
+            fontSize: 50,
+            color: 'rgb(54, 54, 54)',
+            textAlign: 'center',
           }}
         >
-          <h1
-            style={{
-              fontSize: 50,
-              color: 'rgb(54, 54, 54)',
-              textAlign: 'center',
-            }}
-          >
-            Phonebook
-          </h1>
-          <ContactForm onAdd={this.handleAddContact} />
+          Phonebook
+        </h1>
+        <ContactForm onAdd={handleAddContact} />
 
-          <h2
-            style={{
-              fontSize: 40,
-              color: 'rgb(54, 54, 54)',
-              textAlign: 'center',
-            }}
-          >
-            Contacts
-          </h2>
-          <h3
-            style={{
-              fontSize: 35,
-              color: 'rgb(54, 54, 54)',
-              margin: 0,
-            }}
-          >
-            Find contacts by name
-          </h3>
-          <Filter filter={filter} onChange={this.handleFilterChange} />
+        <h2
+          style={{
+            fontSize: 40,
+            color: 'rgb(54, 54, 54)',
+            textAlign: 'center',
+          }}
+        >
+          Contacts
+        </h2>
+        <h3
+          style={{
+            fontSize: 35,
+            color: 'rgb(54, 54, 54)',
+            margin: 0,
+          }}
+        >
+          Find contacts by name
+        </h3>
+        <Filter filter={filter} onChange={handleFilterChange} />
 
-          <ContactList
-            contacts={visibleContacts}
-            onRemove={this.handleRemoveContact}
-          />
-        </div>
+        <ContactList
+          contacts={visibleContacts}
+          onRemove={handleRemoveContact}
+        />
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
