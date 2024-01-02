@@ -1,0 +1,27 @@
+.title1 {
+  font-size: 50px;
+  color: rgb(54, 54, 54);
+  text-align: center;
+}
+.title2 {
+  font-size: 40px;
+  color: rgb(54, 54, 54);
+  text-align: center;
+}
+.title3 {
+  font-size: 35px;
+  color: rgb(54, 54, 54);
+  margin: 0;
+}
+.container {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  color: #010101;
+}
+.content {
+  width: 70%;
+  margin: 40px;
+}
